@@ -1,19 +1,19 @@
-name: Build and deploy to GitHub Pages
+name: Deploy Vite React App
 
 on:
   push:
     branches:
-      - main    # 當 main 有 push 時自動觸發
+      - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js 18
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -24,12 +24,10 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # 範例：把 GitHub Secret 注入給 build 過程
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
 
-      - name: Deploy to gh-pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist           # Vite 的輸出資料夾；CRA 是 build
-          publish_branch: gh-pages
+          publish_dir: ./dist
